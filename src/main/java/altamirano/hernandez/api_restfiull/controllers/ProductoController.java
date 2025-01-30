@@ -2,7 +2,9 @@ package altamirano.hernandez.api_restfiull.controllers;
 
 import altamirano.hernandez.api_restfiull.entities.Producto;
 import altamirano.hernandez.api_restfiull.servicies.IProductoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -39,17 +41,34 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public Map<String, Object> save(@RequestBody Producto producto){
+    public Map<String, Object> save(@Valid @RequestBody Producto producto, BindingResult bindingResult){
         Map<String, Object> json = new HashMap<>();
-        iProductoService.saveProductp(producto);
-        json.put("producto", producto);
+
+        if (bindingResult.hasErrors()){
+            Map<String, Object> errores = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->{
+                errores.put(error.getField(), error.getDefaultMessage());
+            });
+            json.put("errores", errores);
+        }else{
+            iProductoService.saveProductp(producto);
+            json.put("producto", producto);
+        }
         return json;
     }
 
     @PutMapping("/update/{id}")
-    public Map<String, Object>update(@RequestBody Producto producto, @PathVariable int id){
+    public Map<String, Object>update(@Valid @RequestBody Producto producto, @PathVariable int id, BindingResult bindingResult){
         Map<String, Object>json = new HashMap<>();
 
+        if (bindingResult.hasErrors()){
+            Map<String, Object>errores = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->{
+                errores.put(error.getField(), error.getDefaultMessage());
+            });
+            json.put("errores", errores);
+            return json;
+        }
         Producto productoDb = iProductoService.findProductoById(id);
         if (productoDb != null){
             //Verificamos que viene en el RequestBody

@@ -1,6 +1,10 @@
 package altamirano.hernandez.api_restfiull.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,9 +15,18 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotEmpty
+    @Size(max = 60)
     private String nombre;
+
+    @Min(1)
     private double precio;
+
+    @NotEmpty
+    @Size(max = 90)
     private String descripcion;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
