@@ -58,7 +58,7 @@ public class ProductoController {
     }
 
     @PutMapping("/update/{id}")
-    public Map<String, Object>update(@Valid @RequestBody Producto producto, @PathVariable int id, BindingResult bindingResult){
+    public Map<String, Object>update(@PathVariable int id, @Valid @RequestBody Producto producto, BindingResult bindingResult){
         Map<String, Object>json = new HashMap<>();
 
         if (bindingResult.hasErrors()){
