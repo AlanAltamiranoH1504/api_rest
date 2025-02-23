@@ -4,27 +4,24 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "roles")
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Size(min = 2, max = 45)
     @NotBlank
+    @Size(max = 45)
     @Column(unique = true)
     private String nombre;
 
-    public Rol(){
-
-    }
+    //Constructores
+    public Rol(){}
     public Rol(String nombre){
         this.nombre = nombre;
     }
 
-    //Metodos GET y SET
+    //Metodos Get y Set
     public int getId() {
         return id;
     }
@@ -45,19 +42,5 @@ public class Rol {
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 '}';
-    }
-
-    //Metodo equals y hashcode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Rol rol = (Rol) o;
-        return id == rol.id && Objects.equals(nombre, rol.nombre);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nombre);
     }
 }
