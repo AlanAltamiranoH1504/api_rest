@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,20 +20,6 @@ public class Usuario {
     @Size(max = 90)
     private String password;
     private boolean enabled;
-
-    //Agregamos relacion many to many (Un usuario puede tener muchos roles)
-    @ManyToMany
-    @JoinTable(
-            name = "Usuarios_Roles",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "rol_id"),
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "rol_id"})}
-    )
-    List<Rol> roles = new ArrayList<>();
-
-    //Campo non mapeado a la base de datos
-    @Transient
-    private boolean admin;
 
     public Usuario(){
 
@@ -70,18 +54,6 @@ public class Usuario {
     }
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-    public List<Rol> getRoles() {
-        return roles;
-    }
-    public void setRoles(List<Rol> roles) {
-        this.roles = roles;
-    }
-    public boolean isAdmin() {
-        return admin;
-    }
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
     }
 
     //Metodo toString
