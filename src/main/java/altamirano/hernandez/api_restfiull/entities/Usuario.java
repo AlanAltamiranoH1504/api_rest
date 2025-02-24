@@ -15,7 +15,7 @@ public class Usuario {
     private int id;
     @Column(unique = true)
     @NotBlank
-    @Size(min = 5, max = 60)
+    @Size(min = 3, max = 60)
     private String nombre;
     @NotBlank
     @Size(max = 90)
