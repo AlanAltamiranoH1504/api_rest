@@ -1,5 +1,6 @@
 package altamirano.hernandez.api_restfiull.controllers;
 
+import altamirano.hernandez.api_restfiull.dto.UsuarioDTO;
 import altamirano.hernandez.api_restfiull.entities.Usuario;
 import altamirano.hernandez.api_restfiull.servicies.IUsuarioService;
 import jakarta.validation.Valid;
@@ -45,8 +46,15 @@ public class UseController {
         }
 
         iUsuarioService.save(usuario);
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setNombre(usuario.getNombre());
+        usuarioDTO.setEnabled(usuario.isEnabled());
+        usuarioDTO.setAdmin(usuario.isAdmin());
+
         json.put("result", "Usuario guardado");
-        json.put("usuario", usuario);
+        json.put("usuario", usuarioDTO);
+        json.put("roles", usuario.getRoles());
         return json;
     }
 }
