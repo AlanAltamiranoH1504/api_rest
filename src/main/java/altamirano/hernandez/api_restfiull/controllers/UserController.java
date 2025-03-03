@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/security")
-public class UseController {
+public class UserController {
     @Autowired
     private IUsuarioService iUsuarioService;
 
@@ -55,6 +55,36 @@ public class UseController {
         json.put("result", "Usuario guardado");
         json.put("usuario", usuarioDTO);
         json.put("roles", usuario.getRoles());
+        return json;
+    }
+
+    @PostMapping("/register")
+    public Map<String, Object> register(@Valid @RequestBody Usuario usuario, BindingResult bindingResult){
+        Map<String, Object> json = new HashMap<>();
+        if (bindingResult.hasGlobalErrors()){
+            Map<String, Object> errores = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error->{
+                errores.put(error.getField(), error.getDefaultMessage());
+            });
+            json.put("errores", errores);
+            return json;
+        }
+        usuario.setAdmin(false);
+        Map<String, Object> resultado = iUsuarioService.save(usuario);
+        String resultadoKey = (String) resultado.get("Error");
+
+        if (resultadoKey != null){
+            json.put("resultado", resultadoKey);
+        }else{
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(usuario.getId());
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEnabled(usuario.isEnabled());
+            usuarioDTO.setAdmin(usuario.isAdmin());
+            json.put("resultado", "Usuario registrado");
+            json.put("usuario", usuarioDTO);
+            json.put("roles", usuario.getRoles());
+        }
         return json;
     }
 }

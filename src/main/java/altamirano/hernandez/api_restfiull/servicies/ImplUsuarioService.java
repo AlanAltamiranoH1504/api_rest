@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ImplUsuarioService implements IUsuarioService {
@@ -30,26 +32,33 @@ public class ImplUsuarioService implements IUsuarioService {
 
     @Override
     @Transactional(readOnly = false)
-    public Usuario save(Usuario usuario) {
+    public Map<String, Object> save(Usuario usuario) {
+        Map<String, Object> json = new HashMap<>();
+        //Verificamos que el usuario no se ecuentre ya registrado
+        Usuario usuarioEnDb = iUsuarioRepository.findByNombre(usuario.getNombre());
+        if (usuarioEnDb != null){
+            json.put("Error", "Usuario con nombre ya registrado en la base de datos");
+            return json;
+        }
+
         //Buscamos los roles en la db
         Rol rollUser = iRolRepository.findByName("ROLE_USUARIO");
         List<Rol> roles = new ArrayList<>();
-
         //Verificamos que exista el rol "ROLE_USUARIO" en la base de datos. Si existe lo agregamos al array de roles
         if (rollUser != null){
             roles.add(rollUser);
         }
-
         //Verificamos si el usuario es un admin para agregarle el rol admin
         if (usuario.isAdmin()){
             Rol rollAdmin = iRolRepository.findByName("ROLE_ADMIN");
             roles.add(rollAdmin);
         }
 
-        //Al usuario agramos roles y encriptamo la password
+        //Al usuario agregamos roles y encriptamos la password
         usuario.setRoles(roles);
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         iUsuarioRepository.save(usuario);
-        return usuario;
+        json.put("usuario", usuario);
+        return json;
     }
 }

@@ -1,11 +1,13 @@
 package altamirano.hernandez.api_restfiull.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "usuarios")
@@ -22,6 +24,7 @@ public class Usuario {
     private String password;
     private boolean enabled;
     //Relacion ManyToMany - Un Usuario puede tener muchos roles
+    @JsonIgnoreProperties({"usuarios"}) //Evitamos error en el bucle para traer
     @ManyToMany
     @JoinTable(
             name = "Usuarios_Roles",
@@ -91,5 +94,33 @@ public class Usuario {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    //Metodo toString
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", roles=" + roles +
+                ", admin=" + admin +
+                '}';
+    }
+
+    //Metodo hascode y equals
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return id == usuario.id && Objects.equals(nombre, usuario.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre);
     }
 }
