@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ImplProductoService implements IProductoService{
+public class ImplProductoService implements IProductoService {
     //Inyectamos el repositorio
     @Autowired
     IProductoRepository iProductoRepository;
@@ -34,10 +34,10 @@ public class ImplProductoService implements IProductoService{
     @Override
     public void deleteProductoById(int id) {
         Producto producto = iProductoRepository.findById(id).orElse(null);
-        if (producto != null){
+        if (producto != null) {
             iProductoRepository.deleteById(id);
             System.out.println("Producto eliminado de la base de datos");
-        }else{
+        } else {
             System.out.println("Producto no encontrado con ese ID");
         }
     }
@@ -45,10 +45,10 @@ public class ImplProductoService implements IProductoService{
     @Override
     public void deleteProducto(Producto producto) {
         Producto productFind = iProductoRepository.findById(producto.getId()).orElse(null);
-        if (productFind != null){
+        if (productFind != null) {
             iProductoRepository.delete(producto);
             System.out.println("Producto eliminado de la base de datos");
-        }else{
+        } else {
             System.out.println("Producto no encontrado con ese ID");
         }
     }
