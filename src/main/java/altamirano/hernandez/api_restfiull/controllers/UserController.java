@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Habilitamos CORS
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/security")
 public class UserController {
