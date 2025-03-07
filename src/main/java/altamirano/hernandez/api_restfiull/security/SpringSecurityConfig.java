@@ -38,15 +38,19 @@ public class SpringSecurityConfig {
         return httpSecurity.
                 addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))
-                .csrf(csrf-> csrf.disable())
-//                csrf(csrf-> csrf.ignoringRequestMatchers("/security/save", "/security/register"))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                    auth
-                    .requestMatchers(HttpMethod.GET, "/security/prueba", "/security/findAll").permitAll()
-//                        "/security/save" → esa ruta no esta permitida
-                    .requestMatchers(HttpMethod.POST, "/security/register").permitAll()
-
-                        .anyRequest().authenticated()
-        ).build();
+                        auth
+                                //Definimos configuracion de rutas segun permisos de usuario
+                                .requestMatchers(HttpMethod.GET, "/security/prueba", "/security/findAll").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/security/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/security/save").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/productos/findAll").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/productos/findById/{id}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/productos/save").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/productos/update/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/productos/delete/{id}").hasRole("ADMIN")
+                                .anyRequest().authenticated()
+                ).build();
     }
 }
