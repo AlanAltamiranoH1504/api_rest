@@ -1,6 +1,7 @@
 package altamirano.hernandez.api_restfiull.security;
 
 import altamirano.hernandez.api_restfiull.security.filter.JwtAuthenticationFilter;
+import altamirano.hernandez.api_restfiull.security.filter.JwtValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ public class SpringSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.
                 addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
+                .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .csrf(csrf-> csrf.disable())
 //                csrf(csrf-> csrf.ignoringRequestMatchers("/security/save", "/security/register"))
                 .authorizeHttpRequests(auth ->
