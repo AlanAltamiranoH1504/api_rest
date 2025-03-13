@@ -77,10 +77,10 @@ public class SpringSecurityConfig {
         return source;
     }
 
-    @Bean
-    FilterRegistrationBean<CorsFilter> filterRegistrationBean(){
-        FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource()));
-        corsFilterFilterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        return corsFilterFilterRegistrationBean;
-    }
+//    @Bean
+//    FilterRegistrationBean<CorsFilter> filterRegistrationBean(){
+//        FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource()));
+//        corsFilterFilterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        return corsFilterFilterRegistrationBean;
+//    }
 }
